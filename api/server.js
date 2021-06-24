@@ -13,6 +13,14 @@ server.use((error, req, res, next) => {
   // console.log('Req: %j', JSON.stringify(req))
   // console.log('Missed Error Handling Opportunity: %j', error);
   res.status(500).json({ message: "An Error Has Occurred", error });
+
+  process.on("unhandledRejection", (reason, promise) => {
+    new Promise((resolve, reject) => {
+      reject(error);
+    }).catch(error => {
+      console.log(error);
+    });
+  });
 });
 
 module.exports = server;
