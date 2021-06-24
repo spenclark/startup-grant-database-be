@@ -1,6 +1,6 @@
-const express = require("express");
-const middleware = require("./middleware/server.middleware");
-const routes = require("./routes/routes.index");
+const express = require('express');
+const middleware = require('./middleware/server.middleware');
+const routes = require('./routes/routes.index');
 
 const server = express();
 middleware(server);
@@ -12,13 +12,15 @@ routes(server);
  */
 server.use((error, req, res, next) => {
   new Promise((resolve, reject) => {
-    if (error && error.name && error.name === "UnauthorizedError") {
+    if (error && error.name && error.name === 'UnauthorizedError') {
       return res.status(error.status).json({ message: error.message });
     }
-    console.log("Req: %j", JSON.stringify(req));
-    console.log("Missed Error Handling Opportunity: %j", error);
-    res.status(500).json({ message: "An Error Has Occurred", error });
+    console.log('Req: %j', JSON.stringify(req));
+    console.log('Missed Error Handling Opportunity: %j', error);
+    res.status(500).json({ message: 'An Error Has Occurred', error });
+    resolve();
   }).catch(error => {
+    reject(error);
     next();
   });
 });
